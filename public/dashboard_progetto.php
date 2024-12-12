@@ -2,6 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['nome_utente'])) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     header('Location: login.php');
     exit;
 }
@@ -78,6 +79,22 @@ $progetto = Progetti::getById($conn, $progetto_id);
                         <span><i class="fas fa-calendar-alt text-warning me-2"></i> <strong>Data di consegna:</strong></span>
                         <span><?= htmlspecialchars($progetto['data_di_consegna']) ?></span>
                     </div>
+                    <?php if($progetto_id == 2):?>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-success btn-rounded">
+                                <a href="assets/uploads/Ordine1.pdf"
+                                   class="btn-rounded m-1">
+                                    <i class="fas fa-file-alt" id="materiali"></i> Ordine
+                                </a>
+                            </button>
+                            <button type="button" class="btn btn-success btn-rounded">
+                                <a href="assets/uploads/DDT1.pdf"
+                                   class="btn-rounded m-1">
+                                    <i class="fas fa-file-alt" id="materiali"></i> DDT
+                                </a>
+                            </button>
+                        </div>
+                    <?php endif;?>
                 </div>
             </div>
 

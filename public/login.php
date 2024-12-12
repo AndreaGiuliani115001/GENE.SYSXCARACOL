@@ -19,7 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($user && hash('sha256', $password) === $user['password_hash']) {
             // Salva l'utente nella sessione
             $_SESSION['nome_utente'] = $user['nome_utente'];
-            header('Location: dashboard.php');
+            // Controlla se c'è un URL di reindirizzamento salvato nella sessione
+            if (!empty($_SESSION['redirect_to'])) {
+                $redirect_to = $_SESSION['redirect_to'];
+                unset($_SESSION['redirect_to']); // Rimuove il valore dopo il reindirizzamento
+                header("Location: $redirect_to");
+            } else {
+                header('Location: dashboard.php'); // Reindirizza alla dashboard di default
+            }
             exit;
         } else {
             $error = 'Username o password errati.';
@@ -66,12 +73,14 @@ require_once '../includes/navbar.php';
                         </div>
                         <form action="" method="POST">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="nome_utente" name="nome_utente" placeholder="Username"
+                                <input type="text" class="form-control" id="nome_utente" name="nome_utente"
+                                       placeholder="Username"
                                        required>
                                 <label for="nome_utente">Username</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Password"
+                                <input type="password" class="form-control" id="password" name="password"
+                                       placeholder="Password"
                                        required>
                                 <label for="password">Password</label>
                             </div>
